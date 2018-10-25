@@ -53,6 +53,8 @@ class BWP_GXS_MODULE_INDEX extends BWP_GXS_MODULE
 		global $wpdb, $bwp_gxs;
 
 		$post_count_array = array();
+		$post_min_array = array();
+		$post_max_array = array();
 
 		if ('yes' == $bwp_gxs->options['enable_sitemap_split_post'])
 		{
@@ -77,6 +79,8 @@ class BWP_GXS_MODULE_INDEX extends BWP_GXS_MODULE
 			$post_count_query = '
 				SELECT
 					COUNT(p.ID) as total,
+					MIN(p.ID) as min,
+					MAX(p.ID) as max,
 					p.post_type
 				FROM ' . $wpdb->posts . " p
 				WHERE p.post_status = 'publish'
@@ -88,7 +92,11 @@ class BWP_GXS_MODULE_INDEX extends BWP_GXS_MODULE
 			$post_counts = $wpdb->get_results($post_count_query);
 
 			foreach ($post_counts as $count)
+			{
 				$post_count_array[$count->post_type] = $count->total;
+				$post_min_array[$count->post_type] = $count->min;
+				$post_max_array[$count->post_type] = $count->max;
+			}
 
 			unset($post_counts);
 			unset($count);
@@ -138,11 +146,17 @@ class BWP_GXS_MODULE_INDEX extends BWP_GXS_MODULE
 
 					if (1 < $num_part)
 					{
+						$min = $post_min_array[$post_type];
+						$max = $post_max_array[$post_type];
+
 						// more than one parts, split this post-based sitemap
 						for ($i = 1; $i <= $num_part; $i++)
 						{
+							$start = $min + ($split_limit * ($i - 1));
+							$end = $min + ($split_limit * $i) - 1;
+
 							// append part number to sitemap name
-							$sitemap_name = $module_name . '_part' . $i;
+							$sitemap_name = "${module_name}_part${i}_${start}_$end";
 							$data['location'] = $this->get_sitemap_url($sitemap_name);
 
 							$lastmod = $this->_get_sitemap_lastmod($sitemap_name);

@@ -3424,6 +3424,8 @@ class BWP_Sitemaps extends BWP_Framework_V3
 		$sub_module  = stripslashes($sub_module);
 		$part        = 0;
 		$module_name = ''; // the final module name used to generate requested sitemap
+		$range_start = 0;
+		$range_end   = 0;
 
 		// a full sitemap name consists of a module and a sub-module including
 		// any split part (`_part1`, `_part2`, etc.) if any
@@ -3439,8 +3441,7 @@ class BWP_Sitemaps extends BWP_Framework_V3
 		$this->_canonical_redirect($sitemap_name);
 
 		if ('yes' == $this->options['enable_sitemap_split_post']
-			&& (preg_match('/_part([0-9]+)$/i', $sub_module, $matches)
-				|| preg_match('/part([0-9]+)$/i', $sub_module, $matches))
+			&& preg_match('/_?part([0-9]+)_([0-9]+)_([0-9]+)$/i', $sub_module, $matches)
 		) {
 			// Check whether or not splitting is enabled and the sub_module has a
 			// 'part' part, if so we strip the part from sub-module name
@@ -3448,6 +3449,8 @@ class BWP_Sitemaps extends BWP_Framework_V3
 
 			// save the requested part for later use
 			$part = (int) $matches[1];
+			$range_start = (int) $matches[2];
+			$range_end = (int) $matches[3];
 		}
 
 		$modules = $this->_build_sitemap_modules();
@@ -3511,7 +3514,9 @@ class BWP_Sitemaps extends BWP_Framework_V3
 			'module_name'  => $module_name, // @since 1.3.0 this is the same as module_key
 			'module_part'  => $part, // leave this for back-compat
 			'part'         => $part,
-			'sitemap_name' => $sitemap_name // @since 1.3.0 this is the actual sitemap name
+			'sitemap_name' => $sitemap_name, // @since 1.3.0 this is the actual sitemap name
+			'range_start'  => $range_start,
+			'range_end'    => $range_end
 		);
 
 		if ('sitemapindex' != $sitemap_name)

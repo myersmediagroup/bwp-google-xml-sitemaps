@@ -114,6 +114,14 @@ class BWP_GXS_MODULE_POST extends BWP_GXS_MODULE
 	}
 
 	/**
+	 * Override base-class build_data() behavior to just call generate_data() once.
+	 */
+	protected function build_data()
+	{
+		return $this->generate_data();
+	}
+
+	/**
 	 * This is the main function that generates our data.
 	 *
 	 * Since we are dealing with heavy queries here, it's better that you use

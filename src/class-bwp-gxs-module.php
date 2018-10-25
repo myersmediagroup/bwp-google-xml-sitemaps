@@ -36,6 +36,14 @@ class BWP_GXS_MODULE
 	protected $part;
 
 	/**
+	 * Range start, end (inclusive)
+	 *
+	 * @var integer
+	 */
+	protected $range_start;
+	protected $range_end;
+
+	/**
 	 * Holds sitemap items
 	 *
 	 * @var array
@@ -664,16 +672,12 @@ class BWP_GXS_MODULE
 	{
 		global $bwp_gxs, $wpdb;
 
-		$start = !empty($this->url_sofar) ? $this->offset + (int) $this->url_sofar : $this->offset;
-		$end   = (int) $bwp_gxs->options['input_sql_limit'];
+		$range_start = $this->range_start;
+		$range_end = $this->range_end;
 
-		// @since 1.1.5 if we exceed the actual limit, limit $end to the
-		// correct limit
-		if ($this->url_sofar + $end > $this->limit)
-			$end = $this->limit - $this->url_sofar;
-
-		$query_str  = trim($query_str);
-		$query_str .= ' LIMIT ' . $start . ',' . $end;
+		if ($range_start && $range_end) {
+			$query_str = preg_replace('/\bWHERE\b/i', "WHERE (p.ID BETWEEN $range_start AND $range_end) AND ", $query_str);
+		}
 
 		return $wpdb->get_results($query_str);
 	}
@@ -793,6 +797,9 @@ class BWP_GXS_MODULE
 			: $module_data['module'];
 
 		$this->part = !empty($module_data['part']) ? (int) $module_data['part'] : 0;
+
+		$this->range_start = !empty($module_data['range_start']) ? (int) $module_data['range_start'] : 0;
+		$this->range_end = !empty($module_data['range_end']) ? (int) $module_data['range_end'] : 0;
 	}
 
 	/**
