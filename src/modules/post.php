@@ -278,7 +278,7 @@ class BWP_GXS_MODULE_POST extends BWP_GXS_MODULE
 			if ($using_permalinks && empty($post->post_name))
 				$data['location'] = '';
 			else
-				$data['location'] = $this->get_permalink();
+				$data['location'] = apply_filters('bwp_gxs_post_get_permalink', $this->get_permalink(), $post);
 
 			$data['lastmod']  = $this->get_lastmod($post);
 			$data['freq']     = $this->cal_frequency($post);
