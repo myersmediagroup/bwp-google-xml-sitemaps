@@ -16,6 +16,10 @@ class BWP_Sitemaps_Handler_Ajax_NewsTermsHandler extends BWP_Sitemaps_Handler_Aj
 
 	protected $news_genres;
 
+    protected $bridge;
+
+    protected $domain;
+
 	public function __construct(
 		BWP_Sitemaps_Provider_Taxonomy $provider,
 		array $news_terms,

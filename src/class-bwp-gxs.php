@@ -241,6 +241,8 @@ class BWP_Sitemaps extends BWP_Framework_V3
 	 */
 	public $cache_time;
 
+    private $build_stats;
+
 	public function __construct(
 		array $meta,
 		BWP_WP_Bridge $bridge = null,
@@ -682,7 +684,7 @@ class BWP_Sitemaps extends BWP_Framework_V3
 		$this->module_directory = $this->bridge->plugin_dir_path($this->plugin_file) . 'src/modules/';
 
 		$this->custom_module_directory = !empty($this->options['input_alt_module_dir'])
-			? $this->options['input_alt_module_dir'] : null;
+			? $this->options['input_alt_module_dir'] : '';
 
 		/**
 		 * Filter the custom sitemap module directory.
