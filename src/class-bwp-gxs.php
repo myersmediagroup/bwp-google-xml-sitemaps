@@ -2101,7 +2101,9 @@ class BWP_Sitemaps extends BWP_Framework_V3
 			$this->_disable_overridden_inputs($form['input']);
 
 			// use same option key as XML Sitemaps page
-			add_filter('bwp_option_page_submit_form_name', create_function('', "return BWP_GXS_GENERATOR;"));
+			add_filter('bwp_option_page_submit_form_name', function () {
+                return BWP_GXS_GENERATOR;
+            });
 		}
 		elseif ($page == BWP_GXS_STATS)
 		{
@@ -2141,8 +2143,12 @@ class BWP_Sitemaps extends BWP_Framework_V3
 			{
 				// no log is found, or logging is disabled, hide sidebar and
 				// save changes button to save space
-				add_filter('bwp_feed_showable', create_function('', 'return "";'));
-				add_filter('bwp_option_submit_button', create_function('', 'return "";'));
+				add_filter('bwp_feed_showable', function () {
+                    return "";
+                });
+				add_filter('bwp_option_submit_button', function () {
+                    return "";
+                });
 			}
 			else
 			{
