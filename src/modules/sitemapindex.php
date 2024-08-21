@@ -156,7 +156,7 @@ class BWP_GXS_MODULE_INDEX extends BWP_GXS_MODULE
 							$end = $min + ($split_limit * $i) - 1;
 
 							// append part number to sitemap name
-							$sitemap_name = "${module_name}_part${i}_${start}_$end";
+							$sitemap_name = "{$module_name}_part{$i}_{$start}_$end";
 							$data['location'] = $this->get_sitemap_url($sitemap_name);
 
 							$lastmod = $this->_get_sitemap_lastmod($sitemap_name);
