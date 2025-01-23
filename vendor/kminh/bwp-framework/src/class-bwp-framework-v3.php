@@ -255,7 +255,9 @@ abstract class BWP_Framework_V3
 		$this->init_actions();
 
 		// Load locale
-		$this->bridge->load_plugin_textdomain($this->domain, false, $this->plugin_folder . '/languages');
+		add_action('init', function () {
+            $this->bridge->load_plugin_textdomain($this->domain, false, $this->plugin_folder . '/languages');
+        });
 	}
 
 	protected function add_option_key($key, $option, $title)
